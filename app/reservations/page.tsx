@@ -8,9 +8,19 @@ import ReservationForm from "@/components/reservation-form"
 import MotionWrapper from "@/components/animations/motion-wrapper"
 import StaggerChildren from "@/components/animations/stagger-children"
 import { motion, AnimatePresence } from "framer-motion"
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useRouter } from 'next/navigation';
 
 export default function ReservationsPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [lastReservation, setLastReservation] = useState<any>(null)
+  const router = useRouter();
+
+  // Pass a callback to ReservationForm to capture reservation data
+  const handleSuccess = (data: any) => {
+    setLastReservation(data)
+    setIsSubmitted(true)
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -73,54 +83,53 @@ export default function ReservationsPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                       >
-                        <motion.div
-                          className="mb-6 text-amber-700"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-16 w-16 mx-auto"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </motion.div>
-                        <motion.h2
-                          className="text-2xl font-serif font-bold text-stone-800 mb-4"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          Reservation Received
+                        <div className="flex flex-col items-center justify-center mb-6">
+                          <DotLottieReact
+                            src="https://lottie.host/3b0ac62a-b258-4307-9d45-08c494f7a133/k5DxgkGW8X.lottie"
+                            loop={false}
+                            autoplay
+                            style={{ width: 120, height: 120 }}
+                          />
+                        </div>
+                        <motion.h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">
+                          Reservation Confirmed!
                         </motion.h2>
-                        <motion.p
-                          className="text-stone-600 mb-6"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3 }}
-                        >
-                          Thank you for your reservation request. We have sent a confirmation email with the details.
-                          Our team will contact you shortly to confirm your reservation.
+                        <motion.p className="text-stone-600 mb-6">
+                          Thank you for your reservation. We look forward to welcoming you to Massawa!
                         </motion.p>
-                        <motion.button
-                          onClick={() => setIsSubmitted(false)}
-                          className="text-amber-700 underline"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.4 }}
-                          whileHover={{ scale: 1.05 }}
-                        >
-                          Make another reservation
-                        </motion.button>
+                        {lastReservation && (
+                          <div className="bg-stone-50 rounded-lg p-4 mb-6 text-left max-w-md mx-auto shadow">
+                            <h3 className="font-bold mb-2 text-amber-700">Your Reservation</h3>
+                            <ul className="text-stone-700 space-y-1">
+                              <li><b>Name:</b> {lastReservation.name}</li>
+                              <li><b>Email:</b> {lastReservation.email}</li>
+                              <li><b>Phone:</b> {lastReservation.phone}</li>
+                              <li><b>Date:</b> {lastReservation.date}</li>
+                              <li><b>Time:</b> {lastReservation.time}</li>
+                              <li><b>Guests:</b> {lastReservation.guests}</li>
+                              {lastReservation.specialRequests && <li><b>Special Requests:</b> {lastReservation.specialRequests}</li>}
+                            </ul>
+                          </div>
+                        )}
+                        <div className="flex flex-col gap-2 items-center">
+                          <button
+                            className="bg-amber-700 text-white px-6 py-2 rounded hover:bg-amber-800 transition"
+                            onClick={() => router.push('/')}
+                          >
+                            Back to Home
+                          </button>
+                          <button
+                            className="text-amber-700 underline mt-2"
+                            onClick={() => setIsSubmitted(false)}
+                          >
+                            Make another reservation
+                          </button>
+                        </div>
                       </motion.div>
                     ) : (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                         <h2 className="text-2xl font-serif font-bold text-stone-800 mb-6">Book Your Table</h2>
-                        <ReservationForm onSuccess={() => setIsSubmitted(true)} />
+                        <ReservationForm onSuccess={handleSuccess} />
                       </motion.div>
                     )}
                   </AnimatePresence>
