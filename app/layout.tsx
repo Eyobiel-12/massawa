@@ -59,6 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="google-site-verification" content="RVRrR7vz4FFR1eJvkHJbcfJdHwgKUNHR9eWpbGW8JcU" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }} />
         <link rel="alternate" hrefLang="en" href="https://massawarestaurant.com/en" />
         <link rel="alternate" hrefLang="nl" href="https://massawarestaurant.com/nl" />
