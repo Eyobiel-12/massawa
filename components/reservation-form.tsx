@@ -20,7 +20,11 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
     name: "",
     email: "",
     phone: "",
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toLocaleDateString('nl-NL', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).split('.').join('-'),
     time: "",
     guests: "",
     specialRequests: "",
@@ -70,10 +74,17 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
     try {
       const emailData = {
         ...formData,
-        current_time: new Date().toLocaleTimeString('en-US', {
+        current_time: new Date().toLocaleTimeString('nl-NL', {
           hour: '2-digit',
           minute: '2-digit',
-          hour12: true
+          hour12: false,
+          timeZone: 'Europe/Amsterdam'
+        }),
+        formatted_date: new Date(formData.date).toLocaleDateString('nl-NL', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
         })
       }
       await emailjs.send(
@@ -89,7 +100,9 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
       setIsLoading(false)
     }
   }
-  const timeSlots = Array.from({length: 24}, (_, h) => [0,30].map(m => `${((h%12)||12)}:${m===0?"00":m} ${h<12?"AM":"PM"}`)).flat()
+  const timeSlots = Array.from({length: 24}, (_, h) => [0,30].map(m => 
+    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
+  )).flat()
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center mb-4">
