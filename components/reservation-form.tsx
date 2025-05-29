@@ -56,8 +56,27 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
       if (!formData.phone.trim()) newErrors.phone = "Phone is required"
     }
     if (step === 1) {
+      const selectedDate = new Date(formData.date)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      
       if (!formData.date) newErrors.date = "Date is required"
+      else if (selectedDate < today) newErrors.date = "Cannot book for past dates"
+      else if (selectedDate > new Date(Date.now() + 180 * 24 * 60 * 60 * 1000)) {
+        newErrors.date = "Cannot book more than 180 days in advance"
+      }
+      
       if (!formData.time) newErrors.time = "Time is required"
+      else {
+        const [hours, minutes] = formData.time.split(':').map(Number)
+        const selectedDateTime = new Date(selectedDate)
+        selectedDateTime.setHours(hours, minutes, 0, 0)
+        
+        if (selectedDate.getTime() === today.getTime() && selectedDateTime < new Date()) {
+          newErrors.time = "Cannot book for past times"
+        }
+      }
+      
       if (!formData.guests) newErrors.guests = "Number of guests is required"
     }
     setErrors(newErrors)
@@ -145,7 +164,24 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
           <motion.div key="details" initial={{x:100,opacity:0}} animate={{x:0,opacity:1}} exit={{x:-100,opacity:0}} className="space-y-4">
             <div>
               <Label htmlFor="date">Date</Label>
-              <Input id="date" name="date" type="date" value={formData.date} onChange={handleChange} min={new Date().toISOString().split("T")[0]} max={new Date(Date.now()+180*24*60*60*1000).toISOString().split("T")[0]} className={errors.date?"border-red-500":""}/>
+              <Input 
+                id="date" 
+                name="date" 
+                type="date" 
+                value={formData.date} 
+                onChange={handleChange} 
+                min={new Date().toLocaleDateString('nl-NL', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+                }).split('.').join('-')}
+                max={new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toLocaleDateString('nl-NL', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+                }).split('.').join('-')}
+                className={errors.date ? "border-red-500" : ""}
+              />
               {errors.date && <p className="text-red-500 text-xs">{errors.date}</p>}
             </div>
             <div>
