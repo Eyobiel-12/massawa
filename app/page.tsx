@@ -22,7 +22,7 @@ export default function Home() {
         <section className="relative h-[90vh] flex items-center justify-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/massawa-storefront.png"
+              src="/IMG_1150.jpg"
               alt="Massawa Restaurant Interior"
               fill
               className="object-cover brightness-40"
@@ -30,15 +30,17 @@ export default function Home() {
             />
           </div>
           <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
-            <MotionWrapper variant="fadeIn" duration={0.8}>
-              <h1 className="text-4xl md:text-6xl font-serif font-bold text-amber-300 mb-2">Massawa</h1>
-              <h2 className="text-2xl md:text-3xl font-light tracking-wider text-amber-200 mb-6">
-                {t("home.hero.tagline")}
-              </h2>
-            </MotionWrapper>
-            <MotionWrapper variant="slideUp" delay={0.3} duration={0.8}>
-              <p className="text-xl md:text-2xl text-amber-100 mb-8 max-w-2xl mx-auto">{t("home.hero.description")}</p>
-            </MotionWrapper>
+            <div className="bg-black/50 p-6 rounded-lg backdrop-blur-sm">
+              <MotionWrapper variant="fadeIn" duration={0.8}>
+                <h1 className="text-4xl md:text-6xl font-serif font-bold text-amber-300 text-shadow-lg mb-2">Massawa</h1>
+                <h2 className="text-2xl md:text-3xl font-light tracking-wider text-amber-200 text-shadow-md mb-6">
+                  {t("home.hero.tagline")}
+                </h2>
+              </MotionWrapper>
+              <MotionWrapper variant="slideUp" delay={0.3} duration={0.8}>
+                <p className="text-xl md:text-2xl text-amber-100 text-shadow mb-8 max-w-2xl mx-auto">{t("home.hero.description")}</p>
+              </MotionWrapper>
+            </div>
             <MotionWrapper variant="slideUp" delay={0.5} duration={0.8}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="bg-amber-700 hover:bg-amber-800 text-white">

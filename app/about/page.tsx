@@ -16,7 +16,7 @@ export default function AboutPage() {
         <section className="relative h-[50vh] flex items-center justify-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/restaurant-interior.png"
+              src="/Masawa-Eritrea-Sunset.png"
               alt="About Massawa"
               fill
               className="object-cover brightness-50"

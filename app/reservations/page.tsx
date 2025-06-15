@@ -30,7 +30,7 @@ export default function ReservationsPage() {
         <section className="relative h-[40vh] flex items-center justify-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/restaurant-interior.png"
+              src="/hero.jpeg"
               alt="Massawa Reservations"
               fill
               className="object-cover brightness-50"
